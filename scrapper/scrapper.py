@@ -2,16 +2,21 @@ from bs4 import BeautifulSoup
 import requests
 
 
+def getStationNames(station_elements):
+    station_names = []
+    for station_element in station_elements:
+        station_name_element = station_element.find("h4")
+        station_name = station_name_element.get_text()
+        if station_name not in station_names:
+            station_names.append(station_name)
+    return station_names
+
+
 url = "https://harvesttableuva.com/locations/runk-dining-hall/"
 page = requests.get(url)
 soup = BeautifulSoup(page.text, 'html.parser')
 station_elements = soup.find_all(attrs={"menu-station"})
-station_names = []
-for station_element in station_elements:
-    station_name_element = station_element.find("h4")
-    station_name = station_name_element.get_text()
-    if station_name not in station_names:
-        station_names.append(station_name)
+station_names = getStationNames(station_elements)
 print(station_names)
 
 # stations = soup.find_all(attrs={"class":"toggle-menu-station-data"})
