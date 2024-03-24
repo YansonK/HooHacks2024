@@ -61,23 +61,8 @@ station_names = getStationNames()
 station_menus = getStationFoods()
 food_list, ingredients = getFoodsAndTheirIngredients()
 
-
+# Printing Functions
 printStationMenus()
 printFoodsAndIngredients()
 
 # stations = soup.find_all(attrs={"class":"toggle-menu-station-data"})
-
-
-# from selenium import webdriver
-# from selenium.webdriver.chrome.service import Service
-# from webdriver_manager.chrome import ChromeDriverManager
-# from bs4 import BeautifulSoup # Set up Selenium Chrome driver
-# service = Service(ChromeDriverManager().install())
-# driver = webdriver.Chrome(service=service)
-# url = "https://virginia.campusdish.com/LocationsAndMenus/ObservatoryHillDiningRoom"
-# driver.get(url) # Wait for the page to load (you might need to adjust the wait time)
-# driver.implicitly_wait(10) # Extract the HTML content after it's been rendered by JavaScript
-# html = driver.page_source # Parse the HTML using BeautifulSoup
-# soup = BeautifulSoup(html, 'html.parser') # Now you can extract the content you need from the BeautifulSoup object
-# print(soup) # Remember to close the driver when you're done
-# driver.quit()
