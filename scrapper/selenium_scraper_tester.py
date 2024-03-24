@@ -1,10 +1,7 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
-
-def getHTML():
-    driver = webdriver.Chrome()
-    url = "https://harvesttableuva.com/locations/runk-dining-hall/"
+def getHTML(driver, url):
     driver.get(url)  # Wait for the page to load (you might need to adjust the wait time)
     driver.implicitly_wait(10)  # Extract the HTML content after it's been rendered by JavaScript
     html = driver.page_source
@@ -50,6 +47,7 @@ def getFoodsAndTheirIngredients():
             food_list.append(food_name)
     return food_list, ingredients
 
+
 def printStationMenus():
     print("Station Menus:\n\n")
     for i in range(len(station_names)):
@@ -57,17 +55,31 @@ def printStationMenus():
         print(station_menus[i])
         print("\n")
 
+
 def printFoodsAndIngredients():
     print("List of Foods and their Ingredients:\n\n")
     for i in range(len(food_list)):
         print(food_list[i] + ":")
         print(ingredients[i] + "\n")
 
-soup = BeautifulSoup(getHTML(), 'html.parser') # Now you can extract the content you need from the BeautifulSoup object
-station_elements = soup.find_all(attrs={"menu-station"})
-station_names = getStationNames()
-station_menus = getStationFoods()
-food_list, ingredients = getFoodsAndTheirIngredients()
+
+def scrapeDiningHallWebsite():
+    global station_elements, station_names, station_menus, food_list, ingredients
+    dining_hall_url = "https://harvesttableuva.com/locations/runk-dining-hall/"
+    dining_hall_website = BeautifulSoup(getHTML(driver, dining_hall_url),
+                                        'html.parser')  # Now you can extract the content you need from the BeautifulSoup object
+    station_elements = dining_hall_website.find_all(attrs={"menu-station"})
+    station_names = getStationNames()
+    station_menus = getStationFoods()
+    food_list, ingredients = getFoodsAndTheirIngredients()
+
+
+driver = webdriver.Chrome()
+# uva_dine_url = "https://virginia.campusdish.com/en/LocationsAndMenus"
+# uva_dine_website = BeautifulSoup(getHTML(driver, uva_dine_url), 'html.parser') # Now you can extract the content you need from the BeautifulSoup object
+
+# Dining hall website scraper
+scrapeDiningHallWebsite()
 
 # Printing Functions
 printStationMenus()
