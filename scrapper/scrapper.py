@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 
 
-def getStationNames(station_elements):
+def getStationNames():
     station_names = []
     for station_element in station_elements:
         station_name_element = station_element.find("h4")
@@ -12,23 +12,27 @@ def getStationNames(station_elements):
     return station_names
 
 
+def getStationFoods():
+    station_menus = []
+    for station_element in station_elements:
+        food_link_elements = station_element.find_all("li")
+        station_menu = []
+        for food_link_element in food_link_elements:
+            food_element = food_link_element.find("a")
+            food = food_element.get_text()
+            station_menu.append(food)
+        if station_menu not in station_menus:
+            station_menus.append(station_menu)
+    return station_menus
+
+
 url = "https://harvesttableuva.com/locations/runk-dining-hall/"
 page = requests.get(url)
 soup = BeautifulSoup(page.text, 'html.parser')
 station_elements = soup.find_all(attrs={"menu-station"})
-station_names = getStationNames(station_elements)
-station_menus = []
-for station_element in station_elements:
-    food_element_list = station_element.find("ul")
-    food_link_elements = station_element.find_all("li")
-    station_menu = []
-    for food_link_element in food_link_elements:
-        food_element = food_link_element.find("a")
-        food = food_element.get_text()
-        station_menu.append(food)
-    if station_menu not in station_menus:
-        station_menus.append(station_menu)
-# station_names = getStationNames(station_elements)
+station_names = getStationNames()
+station_menus = getStationFoods()
+
 for i in range(len(station_names)):
    print(station_names[i] + ":")
    print(station_menus[i])
