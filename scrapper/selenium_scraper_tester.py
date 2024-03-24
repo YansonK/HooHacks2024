@@ -54,9 +54,10 @@ def printStationMenus(location_name):
     for i in range(len(station_names)):
         print(station_names[i] + " Menu:")
         print(station_menus[i])
+        print("")
 
 def printFoodsAndIngredients():
-    print("List of Foods and their Ingredients:\n\n")
+    print("List of Foods and their Ingredients:\n")
     for i in range(len(food_list)):
         print(food_list[i] + ":")
         print(ingredients[i] + "\n")
