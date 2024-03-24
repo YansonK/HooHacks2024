@@ -67,6 +67,9 @@ def getOHillOrFFCStationFoods(dining_hall_website):
                                                     recursive=True)
     for station_element in station_elements:
         food_link_elements = station_element.find_all(attrs={"data-testid":"product-card-header-link"}, recursive = True)
+        food_title_elements = station_element.find_all(attrs={"data-testid":"product-card-header-title"}, recursive = True)
+        for element in food_title_elements:
+            food_link_elements.append(element)
         station_menu = []
         for food_link_element in food_link_elements:
             food = food_link_element.get_text()
@@ -84,6 +87,10 @@ def getOHillOrFFCFoodsAndTheirIngredients(dining_hall_website):
 
     for food_card in food_cards:
         foods = food_card.find_all(attrs={"data-testid": "product-card-header-link"}, recursive=True)
+        foods_unlinked = food_card.find_all(attrs={"data-testid": "product-card-header-title"},
+                                                       recursive=True)
+        for food in foods_unlinked:
+            foods.append(food)
         food_descriptions = food_card.find_all(attrs={"data-testid": "product-card-description"},
                                                          recursive=True)
         for i in range(0, len(foods)):
