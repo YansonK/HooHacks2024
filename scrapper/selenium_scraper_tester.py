@@ -1,7 +1,8 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
-def getHTML(driver, url):
+def getHTML(url):
+    driver = webdriver.Chrome()
     driver.get(url)  # Wait for the page to load (you might need to adjust the wait time)
     driver.implicitly_wait(10)  # Extract the HTML content after it's been rendered by JavaScript
     html = driver.page_source
@@ -48,13 +49,11 @@ def getFoodsAndTheirIngredients():
     return food_list, ingredients
 
 
-def printStationMenus():
-    print("Station Menus:\n\n")
+def printStationMenus(location_name):
+    print(location_name + " Stations: \n")
     for i in range(len(station_names)):
-        print(station_names[i] + ":")
+        print(station_names[i] + " Menu:")
         print(station_menus[i])
-        print("\n")
-
 
 def printFoodsAndIngredients():
     print("List of Foods and their Ingredients:\n\n")
@@ -63,10 +62,9 @@ def printFoodsAndIngredients():
         print(ingredients[i] + "\n")
 
 
-def scrapeDiningHallWebsite():
+def scrapeDiningHallWebsite(dining_hall_url):
     global station_elements, station_names, station_menus, food_list, ingredients
-    dining_hall_url = "https://harvesttableuva.com/locations/runk-dining-hall/"
-    dining_hall_website = BeautifulSoup(getHTML(driver, dining_hall_url),
+    dining_hall_website = BeautifulSoup(getHTML(dining_hall_url),
                                         'html.parser')  # Now you can extract the content you need from the BeautifulSoup object
     station_elements = dining_hall_website.find_all(attrs={"menu-station"})
     station_names = getStationNames()
@@ -74,13 +72,17 @@ def scrapeDiningHallWebsite():
     food_list, ingredients = getFoodsAndTheirIngredients()
 
 
-driver = webdriver.Chrome()
-# uva_dine_url = "https://virginia.campusdish.com/en/LocationsAndMenus"
-# uva_dine_website = BeautifulSoup(getHTML(driver, uva_dine_url), 'html.parser') # Now you can extract the content you need from the BeautifulSoup object
-
-# Dining hall website scraper
-scrapeDiningHallWebsite()
-
-# Printing Functions
-printStationMenus()
+uva_dine_url = "https://virginia.campusdish.com/en"
+uva_dine_website = BeautifulSoup(getHTML(uva_dine_url + "/LocationsAndMenus"), 'html.parser') # Now you can extract the content you need from the BeautifulSoup object
+content_wrapper = uva_dine_website.find(attrs={"locationList"})
+location_list = content_wrapper.find("ul", recursive=True)
+location_links = (location_list.find_all("a", recursive=True))[0:3]
+location_attributes = location_links[2].attrs
+location_name = location_attributes["aria-label"]
+if "Runk" in location_name:
+    location_web_address = "https://harvesttableuva.com/locations/runk-dining-hall/"
+else:
+    location_web_address = uva_dine_url + location_attributes['href']
+scrapeDiningHallWebsite(location_web_address)
+printStationMenus(location_name)
 printFoodsAndIngredients()
