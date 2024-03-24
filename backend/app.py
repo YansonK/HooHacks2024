@@ -1,12 +1,14 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from pymongo import MongoClient
 import datetime
 from flask_marshmallow import Marshmallow
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:0ut0ftheShad0ws!@localhost/flask'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# Configure MongoDB connection
+app.config['MONGO_URI'] = 'mongodb://localhost:27017/your_database_name'
+mongo = MongoClient(app.config['MONGO_URI'])
 
 app.app_context().push()
 
