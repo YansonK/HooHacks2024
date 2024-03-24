@@ -1,8 +1,9 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
+
 class DiningHallScraper:
-    def __init__(self, dining_hall_url = "", dining_hall_name = ""):
+    def __init__(self, dining_hall_url="", dining_hall_name=""):
         self.dining_hall_url = dining_hall_url
         self.dining_hall_name = dining_hall_name
         self.station_elements = []
@@ -129,12 +130,12 @@ class DiningHallScraper:
             food_descriptions = food_card.find_all(attrs={"data-testid": "product-card-description"},
                                                    recursive=True)
             for i in range(0, len(foods)):
-                food_list.append(foods[i].get_text())
-                if len(food_descriptions) > i:
-                    ingredients.append(food_descriptions[i].get_text())
-                else:
-                    ingredients.append("Ingredient information is currently unavailable.")
-
+                if foods[i].get_text() not in food_list:
+                    food_list.append(foods[i].get_text())
+                    if len(food_descriptions) > i:
+                        ingredients.append(food_descriptions[i].get_text())
+                    else:
+                        ingredients.append("Ingredient information is currently unavailable.")
         return food_list, ingredients
 
     def printStationMenus(self):
@@ -175,11 +176,12 @@ class DiningHallScraper:
             if self.food_list[i] == menu_option:
                 ingredients.append(self.ingredients[i])
         return ingredients
-    
-    def get_scraped_dining_location(index):
-        #index: 0=ohill 1=ffc 2=runk
+
+    def get_scraped_dining_location(self, index):
+        # index: 0=ohill 1=ffc 2=runk
         uva_dine_url = "https://virginia.campusdish.com/en"
-        uva_dine_website = BeautifulSoup(DiningHallScraper().getHTML(uva_dine_url + "/LocationsAndMenus"), 'html.parser')
+        uva_dine_website = BeautifulSoup(DiningHallScraper().getHTML(uva_dine_url + "/LocationsAndMenus"),
+                                         'html.parser')
         content_wrapper = uva_dine_website.find(attrs={"locationList"})
         location_list = content_wrapper.find("ul", recursive=True)
         location_links = (location_list.find_all("a", recursive=True))[0:3]
@@ -191,8 +193,6 @@ class DiningHallScraper:
             location_web_address = uva_dine_url + location_attributes['href']
 
         return DiningHallScraper(location_web_address, location_name)
-
-
 
 
 scraper = DiningHallScraper().get_scraped_dining_location(0)
