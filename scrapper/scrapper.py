@@ -25,6 +25,10 @@ def getStationFoods():
             station_menus.append(station_menu)
     return station_menus
 
+def printStationMenus():
+    for i in range(len(station_names)):
+        print(station_names[i] + ":")
+        print(station_menus[i])
 
 url = "https://harvesttableuva.com/locations/runk-dining-hall/"
 page = requests.get(url)
@@ -33,9 +37,7 @@ station_elements = soup.find_all(attrs={"menu-station"})
 station_names = getStationNames()
 station_menus = getStationFoods()
 
-for i in range(len(station_names)):
-   print(station_names[i] + ":")
-   print(station_menus[i])
+printStationMenus()
 
 # stations = soup.find_all(attrs={"class":"toggle-menu-station-data"})
 
