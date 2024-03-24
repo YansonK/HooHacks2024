@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "hoohacks2024",
+    "slug": "hoohacks2024",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

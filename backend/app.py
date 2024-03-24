@@ -2,8 +2,10 @@ from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 import datetime
 from flask_marshmallow import Marshmallow
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:0ut0ftheShad0ws!@localhost/flask'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -49,6 +51,10 @@ def add_article():
     db.session.commit()
     return article_schema.jsonify(articles)
 
+@app.route('/api/stations', methods=['GET'])
+def get_stations():
+    stations = ['3/5', '2/7', '3/8']
+    return jsonify(stations)
 
 if __name__ == "__main__":
     app.run(debug=True)
