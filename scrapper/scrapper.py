@@ -41,14 +41,17 @@ def getFoodsAndTheirIngredients():
     return food_list, ingredients
 
 def printStationMenus():
+    print("Station Menus:\n\n")
     for i in range(len(station_names)):
         print(station_names[i] + ":")
         print(station_menus[i])
+        print("\n")
 
 def printFoodsAndIngredients():
+    print("List of Foods and their Ingredients:\n\n")
     for i in range(len(food_list)):
         print(food_list[i] + ":")
-        print(ingredients[i])
+        print(ingredients[i] + "\n")
 
 url = "https://harvesttableuva.com/locations/runk-dining-hall/"
 page = requests.get(url)
